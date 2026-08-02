@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://byryyq6ch3asf"]
+
+[ext_resource type="Script" uid="uid://b331n753cv2bb" path="res://scripts/test_1.gd" id="1_p1gcm"]
+[ext_resource type="PackedScene" uid="uid://dc1xjvlrkrov" path="res://scenes/test_2.tscn" id="2_b5onc"]
+[ext_resource type="PackedScene" uid="uid://6weh1qngctbc" path="res://scenes/test_3.tscn" id="3_uxpu0"]
+
+[node name="Test1" type="Node" unique_id=133889666]
+script = ExtResource("1_p1gcm")
+test_2_scene = ExtResource("2_b5onc")
+test_3_scene = ExtResource("3_uxpu0")
+metadata/_custom_type_script = "uid://dpxn232fvunp8"
+
+[node name="Control" type="Control" parent="." unique_id=245834049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=1861793404]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer" unique_id=1544362468]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/CenterContainer/VBoxContainer" unique_id=643492255]
+layout_mode = 2
+text = "Test 1"
+horizontal_alignment = 1
+
+[node name="Test2Button" type="Button" parent="Control/CenterContainer/VBoxContainer" unique_id=1284586653]
+layout_mode = 2
+text = "Test 2"
+
+[node name="Test3Button" type="Button" parent="Control/CenterContainer/VBoxContainer" unique_id=2127655457]
+layout_mode = 2
+text = "Test 3"
+
+[connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Test2Button" to="." method="test_2"]
+[connection signal="pressed" from="Control/CenterContainer/VBoxContainer/Test3Button" to="." method="test_3"]

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dc1xjvlrkrov"]
+
+[ext_resource type="Script" uid="uid://dpxn232fvunp8" path="res://addons/scene_manager/nodes/scene.gd" id="1_kde15"]
+
+[node name="Test2" type="Node" unique_id=376238023]
+script = ExtResource("1_kde15")
+metadata/_custom_type_script = "uid://dpxn232fvunp8"
+
+[node name="Control" type="Control" parent="." unique_id=245834049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=1861793404]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/CenterContainer" unique_id=643492255]
+layout_mode = 2
+text = "Test 2"
