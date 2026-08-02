@@ -17,12 +17,12 @@ var _transitions: Dictionary = {}
 func _ready() -> void:
 	_create_scene_parent()
 	
+	if global:
+		GlobalSceneManager.register_scene_manager(self)
+	
 	remove_scenes()
 	for scene in _initial_scenes:
 		add_scene(scene)
-	
-	if global:
-		GlobalSceneManager.register_scene_manager(self)
 
 func _exit_tree() -> void:
 	if global:

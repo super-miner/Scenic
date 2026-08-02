@@ -10,7 +10,7 @@ var _target_scene_manager: SceneManager = null
 #region public_functions
 func register_scene_manager(scene_manager: SceneManager) -> void:
 	if _target_scene_manager != null:
-		push_error(RE_REGISTER_SCENE_ERROR)
+		push_warning(RE_REGISTER_SCENE_ERROR)
 		return
 	
 	_target_scene_manager = scene_manager
