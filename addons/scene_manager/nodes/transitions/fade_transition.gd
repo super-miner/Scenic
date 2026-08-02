@@ -23,7 +23,7 @@ func transition_in(time_scale: float = 1.0) -> void:
 	_curtain.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	var tween = create_tween()
-	tween.tween_property(_curtain, "modulate", _opaque_color, _duration * time_scale).set_ease(_ease).set_trans(_transition)
+	tween.tween_property(_curtain, "modulate", _opaque_color, _duration / time_scale).set_ease(_ease).set_trans(_transition)
 	
 	await tween.finished
 
@@ -35,7 +35,7 @@ func transition_out(time_scale: float = 1.0) -> void:
 	_curtain.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var tween = create_tween()
-	tween.tween_property(_curtain, "modulate", _transparent_color, _duration * time_scale).set_ease(_ease).set_trans(_transition)
+	tween.tween_property(_curtain, "modulate", _transparent_color, _duration / time_scale).set_ease(_ease).set_trans(_transition)
 	
 	await tween.finished
 

@@ -4,6 +4,7 @@
 
 [node name="Test2" type="Node" unique_id=376238023]
 script = ExtResource("1_kde15")
+_tags = Array[String](["Overlay"])
 metadata/_custom_type_script = "uid://dpxn232fvunp8"
 
 [node name="Control" type="Control" parent="." unique_id=245834049]
