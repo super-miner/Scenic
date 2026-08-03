@@ -22,9 +22,19 @@ signal loaded_scene
 
 #region exports
 @export var name: StringName = &""
-@export_file("*.tscn") var path: String = ""
+@export var uid: int = 0:
+	set(value):
+		if value == uid:
+			return
+		
+		uid = value
+		
+		_path = ResourceUID.get_id_path(uid)
 @export var initial: bool = false
 @export var load_on_start: bool = false
+
+#region identity
+var _path: String = ""
 
 #region references
 var owner: StringName = &""
@@ -38,12 +48,12 @@ var _loading_progress: float = 0.0
 #region public_functions
 func load_scene() -> void:
 	if _scene != null:
-		push_warning(RELOAD_WARNING % path)
+		push_warning(RELOAD_WARNING % _path)
 		return
 	
-	var result = ResourceLoader.load_threaded_request(path, "PackedScene")
+	var result = ResourceLoader.load_threaded_request(_path, "PackedScene")
 	if result != OK:
-		push_error(LOAD_START_FAILED_ERROR % path)
+		push_error(LOAD_START_FAILED_ERROR % _path)
 		return
 	
 	print_verbose(START_LOAD_INFO % name)
@@ -53,7 +63,7 @@ func load_scene() -> void:
 
 func unload_scene() -> void:
 	if _scene == null:
-		push_warning(UNLOAD_NOTHING_WARNING % path)
+		push_warning(UNLOAD_NOTHING_WARNING % _path)
 		return
 	
 	_scene = null
@@ -66,15 +76,15 @@ func poll_loading_progress() -> void:
 		return
 	
 	var progress = []
-	var status = ResourceLoader.load_threaded_get_status(path, progress)
+	var status = ResourceLoader.load_threaded_get_status(_path, progress)
 	
 	match status:
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_FAILED:
-			push_error(LOAD_FAILED_ERROR % path)
+			push_error(LOAD_FAILED_ERROR % _path)
 			_state = SceneLoadingState.NOT_LOADED
 		
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_INVALID_RESOURCE:
-			push_error(LOAD_FAILED_INVALID_RESOURCE_ERROR % path)
+			push_error(LOAD_FAILED_INVALID_RESOURCE_ERROR % _path)
 			_state = SceneLoadingState.NOT_LOADED
 		
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_IN_PROGRESS:
@@ -84,7 +94,7 @@ func poll_loading_progress() -> void:
 			print_verbose(LOAD_INFO % name)
 			
 			_loading_progress = 1.0
-			_scene = ResourceLoader.load_threaded_get(path)
+			_scene = ResourceLoader.load_threaded_get(_path)
 			_state = SceneLoadingState.LOADED
 			
 			loaded_scene.emit()
@@ -97,6 +107,9 @@ func instantiate() -> Scene:
 func queue_free() -> void:
 	_instance.queue_free()
 	_instance = null
+
+func get_path() -> String:
+	return _path
 
 func get_state() -> SceneLoadingState:
 	return _state

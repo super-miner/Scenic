@@ -1,22 +1,11 @@
 @tool
 extends EditorPlugin
 
-
-func _enable_plugin() -> void:
-	# Add autoloads here.
-	pass
-
-
-func _disable_plugin() -> void:
-	# Remove autoloads here.
-	pass
-
+var inspector_plugin: EditorInspectorPlugin
 
 func _enter_tree() -> void:
-	# Initialization of the plugin goes here.
-	pass
-
+	inspector_plugin = preload("res://addons/scene_manager/inspector_plugin.gd").new()
+	add_inspector_plugin(inspector_plugin)
 
 func _exit_tree() -> void:
-	# Clean-up of the plugin goes here.
-	pass
+	remove_inspector_plugin(inspector_plugin)

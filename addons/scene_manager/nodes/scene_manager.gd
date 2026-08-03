@@ -22,11 +22,10 @@ enum SceneChangeState {
 
 #region exports
 @export var global: bool = true
-@export var _scenes: Array[SceneInfo] = []
+@export var _scenes: Dictionary = {} #{<scene_name>: <scene_info>}
 
 #region references
 var _scene_parent: Node = null
-var _internal_scenes: Dictionary = {} #{<scene_name>: <scene_info>}
 var _active_scenes: Dictionary = {} #{<scene_name>: <scene_info>}
 var _transitions: Dictionary = {}
 
@@ -38,9 +37,6 @@ var _currently_loading: Dictionary = {} #{<scene_name>: <scene_info>}
 var _force_loaded: Dictionary = {&"Global": {}} #{<owner_scene_name>: {<scene_name>: null}}
 
 #region node_events
-func _enter_tree() -> void:
-	_create_internal_scenes()
-
 func _ready() -> void:
 	_create_scene_parent()
 	
@@ -48,7 +44,7 @@ func _ready() -> void:
 		GlobalSceneManager.register_scene_manager(self)
 	
 	queue_remove_scenes()
-	for scene_info in _internal_scenes.values():
+	for scene_info in _scenes.values():
 		if scene_info.initial:
 			queue_add_scene(scene_info.name)
 	apply()
@@ -176,17 +172,13 @@ func unregister_transition(transition: SceneTransition) -> void:
 	_transitions.erase(transition.name)
 
 #region private_functions
-func _create_internal_scenes() -> void:
-	for scene in _scenes:
-		_internal_scenes.set(scene.name, scene)
-
 func _create_scene_parent() -> void:
 	_scene_parent = Node.new()
 	_scene_parent.name = &"SceneParent"
 	add_child(_scene_parent)
 
 func _get_scene_info_by_name(scene_name: StringName) -> SceneInfo:
-	return _internal_scenes.get(scene_name)
+	return _scenes.get(scene_name)
 
 func _get_transition_by_name(transition_name: StringName) -> SceneTransition:
 	return _transitions.get(transition_name)
