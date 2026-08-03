@@ -9,6 +9,7 @@ var _tree: Tree = null
 #region state
 var _scenes: Dictionary
 var _updating: bool = false
+var _previous_selected: TreeItem = null
 var _item_just_added: StringName = &""
 
 #region node_events
@@ -25,6 +26,8 @@ func _init(scenes: Dictionary) -> void:
 	_tree.scroll_vertical_enabled = false
 	_tree.button_clicked.connect(_on_button_clicked)
 	_tree.item_edited.connect(_on_item_edited)
+	_tree.item_selected.connect(_on_item_selected)
+	_tree.item_activated.connect(_on_item_activated)
 	_tree.dropped_file.connect(_on_dropped_file)
 	add_child(_tree)
 	set_bottom_editor(_tree)
@@ -79,17 +82,54 @@ func _on_item_edited() -> void:
 		1:
 			scene_info.path = item.get_text(1)
 	
+	item.set_editable(0, false)
+	
 	emit_changed(get_edited_property(), new_scenes)
 
-func _on_dropped_file(path: String) -> void:
-	var new_scenes = _scenes.duplicate(true)
-	var new_scene_info = SceneInfo.new()
-	new_scene_info.name = find_valid_name(path.get_file().get_basename().capitalize())
-	new_scene_info.uid = ResourceLoader.get_resource_uid(path)
-	new_scenes.set(new_scene_info.name, new_scene_info)
+func _on_item_selected() -> void:
+	var item = _tree.get_selected()
+	var column = _tree.get_selected_column()
 	
-	_item_just_added = new_scene_info.name
-	emit_changed(get_edited_property(), new_scenes)
+	match column:
+		0:
+			if _previous_selected != null:
+				item.set_editable(0, false)
+			
+			await get_tree().process_frame
+			item.set_editable(0, true)
+	
+	_previous_selected = item
+
+func _on_item_activated() -> void:
+	var item = _tree.get_selected()
+	var column = _tree.get_selected_column()
+	
+	var scene_info = _scenes.get(item.get_metadata(0))
+	
+	match column:
+		1:
+			EditorInterface.select_file(scene_info.get_path())
+
+func _on_dropped_file(path: String) -> void:
+	var uid = ResourceLoader.get_resource_uid(path)
+	var existing_scene_info = _get_scene_from_uid(uid)
+	
+	if existing_scene_info == null:
+		var name = find_valid_name(path.get_file().get_basename().capitalize())
+		
+		var new_scenes = _scenes.duplicate(true)
+		var new_scene_info = SceneInfo.new()
+		new_scene_info.name = name
+		new_scene_info.uid = uid
+		new_scenes.set(new_scene_info.name, new_scene_info)
+		
+		_item_just_added = name
+		emit_changed(get_edited_property(), new_scenes)
+	else:
+		var name = existing_scene_info.name
+		
+		_item_just_added = name
+		_update_list()
 
 #region private_functions
 func _update_list() -> void:
@@ -101,8 +141,8 @@ func _update_list() -> void:
 		var item = _tree.create_item(root)
 		item.set_metadata(0, scene_info.name)
 		item.set_text(0, scene_info.name)
-		item.set_editable(0, true)
 		item.set_text(1, scene_info.get_path())
+		item.set_icon(1, _editor_theme.get_icon("PackedScene", "EditorIcons"))
 		item.add_button(1, _editor_theme.get_icon("AutoPlay", "EditorIcons"), 0, false, "Initial")
 		item.set_button_color(1, 0, Color(1.0, 1.0, 1.0, 1.0 if scene_info.initial else 0.5))
 		item.add_button(1, _editor_theme.get_icon("ResourcePreloader", "EditorIcons"), 1, false, "Load on Start")
@@ -113,11 +153,21 @@ func _update_list() -> void:
 			new_item = item
 	
 	if _item_just_added != &"" && new_item != null:
+		new_item.set_editable(0, true)
 		_tree.set_selected(new_item, 0)
 		await get_tree().process_frame
 		_tree.edit_selected(true)
 		
 		_item_just_added = &""
+
+func _get_scene_from_uid(uid: int) -> SceneInfo:
+	for scene_info in _scenes.values():
+		if scene_info.uid != uid:
+			continue
+		
+		return scene_info
+	
+	return null
 
 func find_valid_name(name: StringName) -> StringName:
 	var current_name = name
