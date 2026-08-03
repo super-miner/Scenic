@@ -17,6 +17,12 @@ name = &"Test 2"
 uid = 216315507167921973
 _path = "res://scenes/test_2.tscn"
 
+[sub_resource type="Resource" id="Resource_tbgi4"]
+script = ExtResource("2_sugp2")
+name = &"Test 3"
+uid = 2221527222819472640
+_path = "res://scenes/test_3.tscn"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
 bg_color = Color(1, 1, 1, 1)
 
@@ -24,7 +30,8 @@ bg_color = Color(1, 1, 1, 1)
 script = ExtResource("1_o5qli")
 _scenes = {
 &"Test 1": SubResource("Resource_sugp2"),
-&"Test 2": SubResource("Resource_jyhfs")
+&"Test 2": SubResource("Resource_jyhfs"),
+&"Test 3": SubResource("Resource_tbgi4")
 }
 metadata/_custom_type_script = "uid://duewdbbsl6u0s"
 
