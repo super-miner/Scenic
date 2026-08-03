@@ -1,6 +1,9 @@
 @tool
 extends EditorProperty
 
+#region constants
+var DUPLICATE_NAME_INDEX_REGEX: RegEx = RegEx.create_from_string("_(\\d+)$")
+
 #region references
 var _droppable_tree = preload("res://addons/scene_manager/inspectors/droppable_tree.gd")
 var _editor_theme: Theme = null
@@ -71,13 +74,23 @@ func _on_item_edited() -> void:
 	var item = _tree.get_edited()
 	var column = _tree.get_edited_column()
 	
+	var new_name = item.get_text(0)
+	var old_name = item.get_metadata(0)
+	
+	if _updating:
+		item.set_text(0, old_name)
+		return
+	
+	if new_name == old_name:
+		return
+	
 	var new_scenes = _scenes.duplicate(true)
-	var scene_info = new_scenes.get(item.get_metadata(0))
+	var scene_info = new_scenes.get(old_name)
 	
 	match column:
 		0:
 			new_scenes.erase(scene_info.name)
-			scene_info.name = item.get_text(0)
+			scene_info.name = _find_valid_name(new_name, scene_info.name)
 			new_scenes.set(scene_info.name, scene_info)
 		1:
 			scene_info.path = item.get_text(1)
@@ -115,7 +128,7 @@ func _on_dropped_file(path: String) -> void:
 	var existing_scene_info = _get_scene_from_uid(uid)
 	
 	if existing_scene_info == null:
-		var name = find_valid_name(path.get_file().get_basename().capitalize())
+		var name = _find_valid_name(path.get_file().get_basename().capitalize())
 		
 		var new_scenes = _scenes.duplicate(true)
 		var new_scene_info = SceneInfo.new()
@@ -174,11 +187,24 @@ func _get_scene_from_uid(uid: int) -> SceneInfo:
 	
 	return null
 
-func find_valid_name(name: StringName) -> StringName:
-	var current_name = name
-	var index = 1
-	while _scenes.has(current_name):
-		current_name = "%s_%d" % [name, index]
+func _find_valid_name(new_name: StringName, old_name: StringName = &"") -> StringName:
+	if !_scenes.has(new_name):
+		return new_name
+	
+	var index_match = DUPLICATE_NAME_INDEX_REGEX.search(new_name)
+	
+	var base_name
+	var index
+	if index_match == null:
+		base_name = new_name
+		index = 1
+	else:
+		base_name = DUPLICATE_NAME_INDEX_REGEX.sub(new_name, "")
+		index = int(index_match.strings[1]) + 1
+	
+	var current_name = "%s_%d" % [base_name, index]
+	while current_name != old_name && _scenes.has(current_name):
+		current_name = "%s_%d" % [base_name, index]
 		index += 1
 	
 	return current_name

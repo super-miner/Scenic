@@ -8,18 +8,17 @@
 script = ExtResource("2_sugp2")
 name = &"Test 1"
 uid = 4107548308068872633
-initial = true
 _path = "res://scenes/test_1.tscn"
 
 [sub_resource type="Resource" id="Resource_jyhfs"]
 script = ExtResource("2_sugp2")
-name = &"Test 2"
+name = &"Test 1_1"
 uid = 216315507167921973
 _path = "res://scenes/test_2.tscn"
 
 [sub_resource type="Resource" id="Resource_tbgi4"]
 script = ExtResource("2_sugp2")
-name = &"Test 3"
+name = &"Test 1_3"
 uid = 2221527222819472640
 _path = "res://scenes/test_3.tscn"
 
