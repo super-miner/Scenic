@@ -21,6 +21,20 @@ func unregister_scene_manager(scene_manager: SceneManager) -> void:
 	
 	_target_scene_manager = null
 
+func force_load(scene_name: StringName, scene_owner: StringName = &"Global") -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.force_load(scene_name, scene_owner)
+
+func force_unload(scene_name: StringName) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.force_unload(scene_name)
+
 func queue_add_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)

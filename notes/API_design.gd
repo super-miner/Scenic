@@ -55,7 +55,7 @@ GlobalSceneManager.with_transition(&"Fade")
 
 
 ## Load scene far in advance without blocking other scenes from loading
-GlobalSceneManager.load_scene(&"Test")
+GlobalSceneManager.force_load(&"Test")
 
 # ... (some code)
 
@@ -65,7 +65,7 @@ GlobalSceneManager.with_transition(&"Fade")
 
 
 ## Preload with manual freeing
-GlobalSceneManager.load_scene(&"Test")
+GlobalSceneManager.force_load(&"Test")
 
 # ... (some code)
 
@@ -73,14 +73,14 @@ if ...:
 	GlobalSceneManager.queue_set_scene(&"Test")
 	GlobalSceneManager.with_transition(&"Fade")
 else:
-	GlobalSceneManager.free(&"Test")
+	GlobalSceneManager.force_unload(&"Test")
 	GlobalSceneManager.queue_set_scene(&"Test 2")
 	GlobalSceneManager.with_transition(&"Fade")
 
 
 
 ## Preload with automatic freeing
-GlobalSceneManager.load_scene(&"Test", &"Current") # Setting the owner to current_scene so that it gets freed Current unloads
+GlobalSceneManager.force_load(&"Test", &"Current") # Setting the owner to current_scene so that it gets freed Current unloads
 
 # ... (some code)
 

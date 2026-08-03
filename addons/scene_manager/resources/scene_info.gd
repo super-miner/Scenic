@@ -1,6 +1,8 @@
 class_name SceneInfo extends Resource
 
 #region constants
+const LOAD_INFO: String = 							"[Scenes] Started loading %s"
+const UNLOAD_INFO: String = 						"[Scenes] Unloaded %s"
 const RELOAD_WARNING: String = 						"[Scenes] Attempting to load \"%s\" after it has already been loaded"
 const UNLOAD_NOTHING_WARNING: String = 				"[Scenes] Attempting to unload \"%s\" when it is already unloaded"
 const LOAD_START_FAILED_ERROR: String = 			"[Scenes] Failed to start loading the scene from path \"%s\""
@@ -24,6 +26,7 @@ signal loaded_scene
 @export var load_on_start: bool = false
 
 #region references
+var owner: Scene = null
 var _scene: PackedScene = null
 var _instance: Scene = null
 
@@ -44,6 +47,8 @@ func load_scene() -> void:
 	
 	_loading_progress = 0.0
 	_state = SceneLoadingState.LOADING
+	
+	print_verbose(LOAD_INFO % name)
 
 func unload_scene() -> void:
 	if _scene == null:
@@ -52,6 +57,8 @@ func unload_scene() -> void:
 	
 	_scene = null
 	_state = SceneLoadingState.NOT_LOADED
+	
+	print_verbose(UNLOAD_INFO % name)
 
 func poll_loading_progress() -> void:
 	if _state != SceneLoadingState.LOADING:
