@@ -1,3 +1,4 @@
+@tool
 class_name SceneInfo extends Resource
 
 #region constants
@@ -32,9 +33,8 @@ signal loaded_scene
 		_path = ResourceUID.get_id_path(uid)
 @export var initial: bool = false
 @export var load_on_start: bool = false
-
-#region identity
-var _path: String = ""
+# This needs to be both exported and placed below uid in the script so that it is loaded after uid. This is because setting uid on load sets an incorrect path and thus this needs to overwrite it.
+@export var _path: String = ""
 
 #region references
 var owner: StringName = &""

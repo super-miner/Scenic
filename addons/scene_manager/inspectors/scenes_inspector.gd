@@ -146,7 +146,7 @@ func _update_list() -> void:
 		var item = _tree.create_item(root)
 		item.set_metadata(0, scene_name)
 		item.set_text(0, scene_name)
-		item.set_text(1, scene_info.get_path())
+		item.set_text(1, ResourceUID.get_id_path(scene_info.uid))
 		item.set_icon(1, _editor_theme.get_icon("PackedScene", "EditorIcons"))
 		item.add_button(1, _editor_theme.get_icon("AutoPlay", "EditorIcons"), 0, false, "Initial")
 		item.set_button_color(1, 0, Color(1.0, 1.0, 1.0, 1.0 if scene_info.initial else 0.5))

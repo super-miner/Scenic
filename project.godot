@@ -18,10 +18,6 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 
 GlobalSceneManager="*uid://dwycp85sl04s"
 
-[debug]
-
-settings/stdout/verbose_stdout=true
-
 [display]
 
 window/size/viewport_width=1280
