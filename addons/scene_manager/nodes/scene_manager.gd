@@ -143,6 +143,9 @@ func apply() -> void:
 	_state = SceneChangeState.NONE
 
 func with_transition(in_transition: StringName, in_time_scale: float = 1.0, out_transition: StringName = &"", out_time_scale: float = -1.0) -> void:
+	with_transition_callback(func (): pass, in_transition, in_time_scale, out_transition, out_time_scale)
+
+func with_transition_callback(callback: Callable, in_transition: StringName, in_time_scale: float = 1.0, out_transition: StringName = &"", out_time_scale: float = -1.0) -> void:
 	_state = SceneChangeState.IN_PROGRESS
 	
 	var transition = _get_transition_by_name(in_transition)
@@ -152,6 +155,8 @@ func with_transition(in_transition: StringName, in_time_scale: float = 1.0, out_
 		time_scale = 1.0
 	
 	await transition.transition_in(time_scale)
+	
+	await callback.call()
 	
 	await _apply_scene_deltas()
 	

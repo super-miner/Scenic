@@ -76,3 +76,10 @@ func with_transition(in_transition: StringName, in_time_scale: float = 1.0, out_
 		return
 	
 	_target_scene_manager.with_transition(in_transition, in_time_scale, out_transition, out_time_scale)
+
+func with_transition_callback(callback: Callable, in_transition: StringName, in_time_scale: float = 1.0, out_transition: StringName = &"", out_time_scale: float = -1.0) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.with_transition_callback(callback, in_transition, in_time_scale, out_transition, out_time_scale)
