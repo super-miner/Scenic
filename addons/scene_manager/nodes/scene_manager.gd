@@ -2,6 +2,10 @@
 class_name SceneManager extends Node
 
 #region constants
+const SCENE_ADD_QUEUED_INFO: String = 			"[Scenes] %s queued for creation"
+const SCENE_REMOVE_QUEUED_INFO: String = 		"[Scenes] %s queued for creation"
+const SCENE_INSTANTIATED_INFO: String = 		"[Scenes] %s instantiated"
+const SCENE_FREED_INFO: String = 				"[Scenes] %s freed"
 const SCENE_NOT_PRELOADED_WARNING: String = 	"[Scenes] %s had not started loading before _apply_scene_deltas was called"
 const INVALID_TIME_SCALE_ERROR: String = 		"[Scenes] Invalid time scale %s. Setting time scale to 1.0"
 const SCENE_ADD_IN_PROGRESS_ERROR: String = 	"[Scenes] Attempted to queue a scene add operation while a scene change was in progress"
@@ -67,6 +71,8 @@ func queue_add_scene(scene_name: StringName) -> void:
 		
 		scene_info.load_scene()
 		_currently_loading.set(scene_name, scene_info)
+		
+		print_verbose(SCENE_ADD_QUEUED_INFO % scene_name)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -78,6 +84,8 @@ func queue_remove_scene(scene_name: StringName) -> void:
 	elif _active_scenes.has(scene_name):
 		var scene_info = _get_scene_info_by_name(scene_name)
 		_queue_remove.set(scene_name, scene_info)
+		
+		print_verbose(SCENE_REMOVE_QUEUED_INFO % scene_name)
 
 func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -189,8 +197,12 @@ func _add_scene(scene_info: SceneInfo) -> void:
 	
 	_scene_parent.add_child(scene)
 	_active_scenes.set(scene_info.name, scene_info)
+	
+	print_verbose(SCENE_INSTANTIATED_INFO % scene_info.name)
 
 func _remove_scene(scene_info: SceneInfo) -> void:
 	_scene_parent.remove_child(scene_info.get_instance())
 	scene_info.queue_free()
 	_active_scenes.erase(scene_info.name)
+	
+	print_verbose(SCENE_FREED_INFO % scene_info.name)
