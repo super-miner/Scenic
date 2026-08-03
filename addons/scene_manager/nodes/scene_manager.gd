@@ -9,6 +9,9 @@ const SCENE_INSTANTIATED_INFO: String = 		"[Scenes] %s instantiated"
 const SCENE_RELOADED_INFO: String = 			"[Scenes] %s reloaded"
 const SCENE_FREED_INFO: String = 				"[Scenes] %s freed"
 const APPLY_SCENE_DELTAS_INFO: String = 		"[Scenes] Applying scene deltas"
+const SCENE_ADD_EXISTS_WARNING: String = 		"[Scenes] Attempted to add a scene when it was already added and not queued for removal"
+const SCENE_RELOAD_NOT_EXISTS_WARNING: String = "[Scenes] Attempted to reload a scene that was not added"
+const SCENE_REMOVE_NOT_EXISTS_WARNING: String = "[Scenes] Attempted to remove a scene that was not added"
 const SCENE_NOT_PRELOADED_WARNING: String = 	"[Scenes] %s had not started loading before _apply_scene_deltas was called"
 const INVALID_OWNER_ERROR: String = 			"[Scenes] Invalid scene owner %s. Must be \"Global\" or the name of a currently loaded scene (%d scenes currently loaded)"
 const INVALID_TIME_SCALE_ERROR: String = 		"[Scenes] Invalid time scale %s. Setting time scale to 1.0"
@@ -99,6 +102,8 @@ func queue_add_scene(scene_name: StringName) -> void:
 		
 		if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADED:
 			_load_scene(scene_info)
+	else:
+		push_warning(SCENE_ADD_EXISTS_WARNING)
 
 func queue_reload_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -112,6 +117,8 @@ func queue_reload_scene(scene_name: StringName) -> void:
 		_queue_reload.set(scene_name, scene_info)
 		
 		print_verbose(SCENE_RELOAD_QUEUED_INFO % scene_name)
+	else:
+		push_warning(SCENE_RELOAD_NOT_EXISTS_WARNING)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -128,6 +135,8 @@ func queue_remove_scene(scene_name: StringName) -> void:
 		_queue_remove.set(scene_name, scene_info)
 		
 		print_verbose(SCENE_REMOVE_QUEUED_INFO % scene_name)
+	else:
+		push_warning(SCENE_REMOVE_NOT_EXISTS_WARNING)
 
 func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
