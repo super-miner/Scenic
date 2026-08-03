@@ -66,8 +66,7 @@ func force_load(scene_name: StringName, scene_owner: StringName = &"Global") -> 
 	_force_loaded.get(scene_owner).set(scene_name, null)
 	
 	if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADED:
-		scene_info.load_scene()
-		_currently_loading.set(scene_name, scene_info)
+		_load_scene(scene_info)
 
 func force_unload(scene_name: StringName) -> void:
 	var scene_info = _get_scene_info_by_name(scene_name)
@@ -79,8 +78,7 @@ func force_unload(scene_name: StringName) -> void:
 	scene_info.owner = &""
 	
 	if !_active_scenes.has(scene_name):
-		scene_info.unload_scene()
-		_currently_loading.erase(scene_name)
+		_unload_scene(scene_info)
 
 func queue_add_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -96,8 +94,7 @@ func queue_add_scene(scene_name: StringName) -> void:
 		print_verbose(SCENE_ADD_QUEUED_INFO % scene_name)
 		
 		if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADED:
-			scene_info.load_scene()
-			_currently_loading.set(scene_name, scene_info)
+			_load_scene(scene_info)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -200,7 +197,7 @@ func _wait_for_queued_scenes_to_load() -> void:
 	for scene_info in _queue_add.values():
 		if scene_info.get_state() == SceneInfo.SceneLoadingState.NOT_LOADED:
 			push_warning(SCENE_NOT_PRELOADED_WARNING % scene_info.name)
-			scene_info.load_scene() # This is just a fallback incase it didn't start loading when queued
+			_load_scene(scene_info) # This is just a fallback incase it didn't start loading when queued
 		
 		if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADED:
 			await scene_info.loaded_scene
@@ -218,6 +215,14 @@ func _apply_scene_deltas() -> void:
 	
 	_queue_add.clear()
 	_queue_remove.clear()
+
+func _load_scene(scene_info: SceneInfo) -> void:
+	scene_info.load_scene()
+	_currently_loading.set(scene_info.name, scene_info)
+
+func _unload_scene(scene_info: SceneInfo) -> void:
+	scene_info.unload_scene()
+	_currently_loading.erase(scene_info.name)
 
 func _add_scene(scene_info: SceneInfo) -> void:
 	_active_scenes.set(scene_info.name, scene_info)
@@ -240,12 +245,10 @@ func _remove_scene(scene_info: SceneInfo) -> void:
 			continue
 		
 		var owned_info = _get_scene_info_by_name(owned_name)
-		owned_info.unload_scene() # Cancel scene loading
-		_currently_loading.erase(owned_name)
+		_unload_scene(owned_info)
 	
 	if scene_info.owner != &"Global" && !_active_scenes.has(scene_info.owner):
-		scene_info.unload_scene() # Cancel scene loading
-		_currently_loading.erase(scene_info.name)
+		_unload_scene(scene_info)
 	
 	_active_scenes.erase(scene_info.name)
 	_force_loaded.erase(scene_info.name)
