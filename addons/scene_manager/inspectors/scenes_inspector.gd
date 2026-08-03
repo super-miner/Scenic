@@ -137,10 +137,15 @@ func _update_list() -> void:
 	
 	var new_item = null
 	var root = _tree.create_item()
-	for scene_info in _scenes.values():
+	var scene_names = _scenes.keys()
+	scene_names.sort_custom(func (a: StringName, b: StringName):
+		return String(a) < String(b)
+	)
+	for scene_name in scene_names:
+		var scene_info = _scenes.get(scene_name)
 		var item = _tree.create_item(root)
-		item.set_metadata(0, scene_info.name)
-		item.set_text(0, scene_info.name)
+		item.set_metadata(0, scene_name)
+		item.set_text(0, scene_name)
 		item.set_text(1, scene_info.get_path())
 		item.set_icon(1, _editor_theme.get_icon("PackedScene", "EditorIcons"))
 		item.add_button(1, _editor_theme.get_icon("AutoPlay", "EditorIcons"), 0, false, "Initial")
@@ -149,7 +154,7 @@ func _update_list() -> void:
 		item.set_button_color(1, 1, Color(1.0, 1.0, 1.0, 1.0 if scene_info.load_on_start else 0.5))
 		item.add_button(1, _editor_theme.get_icon("Remove", "EditorIcons"), 2, false, "Remove")
 		
-		if _item_just_added == scene_info.name:
+		if _item_just_added == scene_name:
 			new_item = item
 	
 	if _item_just_added != &"" && new_item != null:
