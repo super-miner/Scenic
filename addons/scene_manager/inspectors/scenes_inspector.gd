@@ -1,9 +1,6 @@
 @tool
 extends EditorProperty
 
-#region constants
-const DEFAULT_SCENE_NAME: StringName = &"New Scene"
-
 #region references
 var _droppable_tree = preload("res://addons/scene_manager/inspectors/droppable_tree.gd")
 var _editor_theme: Theme = null
@@ -12,7 +9,7 @@ var _tree: Tree = null
 #region state
 var _scenes: Dictionary
 var _updating: bool = false
-var _item_just_added: bool = false
+var _item_just_added: StringName = &""
 
 #region node_events
 func _init(scenes: Dictionary) -> void:
@@ -87,11 +84,11 @@ func _on_item_edited() -> void:
 func _on_dropped_file(path: String) -> void:
 	var new_scenes = _scenes.duplicate(true)
 	var new_scene_info = SceneInfo.new()
-	new_scene_info.name = DEFAULT_SCENE_NAME
+	new_scene_info.name = find_valid_name(path.get_file().get_basename().capitalize())
 	new_scene_info.uid = ResourceLoader.get_resource_uid(path)
 	new_scenes.set(new_scene_info.name, new_scene_info)
 	
-	_item_just_added = true
+	_item_just_added = new_scene_info.name
 	emit_changed(get_edited_property(), new_scenes)
 
 #region private_functions
@@ -112,12 +109,21 @@ func _update_list() -> void:
 		item.set_button_color(1, 1, Color(1.0, 1.0, 1.0, 1.0 if scene_info.load_on_start else 0.5))
 		item.add_button(1, _editor_theme.get_icon("Remove", "EditorIcons"), 2, false, "Remove")
 		
-		if _item_just_added && scene_info.name == DEFAULT_SCENE_NAME:
+		if _item_just_added == scene_info.name:
 			new_item = item
 	
-	if _item_just_added && new_item != null:
+	if _item_just_added != &"" && new_item != null:
 		_tree.set_selected(new_item, 0)
 		await get_tree().process_frame
 		_tree.edit_selected(true)
 		
-		_item_just_added = false
+		_item_just_added = &""
+
+func find_valid_name(name: StringName) -> StringName:
+	var current_name = name
+	var index = 1
+	while _scenes.has(current_name):
+		current_name = "%s_%d" % [name, index]
+		index += 1
+	
+	return current_name
