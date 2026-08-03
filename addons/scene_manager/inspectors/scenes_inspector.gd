@@ -156,6 +156,10 @@ func _update_list() -> void:
 	)
 	for scene_name in scene_names:
 		var scene_info = _scenes.get(scene_name)
+		
+		if scene_name != scene_info.name:
+			printerr("Desync between name key and name found (name key: %s, name: %s)" % [scene_name, scene_info.name])
+		
 		var item = _tree.create_item(root)
 		item.set_metadata(0, scene_name)
 		item.set_text(0, scene_name)
