@@ -1,6 +1,7 @@
 class_name SceneInfo extends Resource
 
 #region constants
+const START_LOAD_INFO: String = 					"[Scenes] %s started loading"
 const LOAD_INFO: String = 							"[Scenes] %s loaded"
 const UNLOAD_INFO: String = 						"[Scenes] %s unloaded"
 const RELOAD_WARNING: String = 						"[Scenes] Attempting to load \"%s\" after it has already been loaded"
@@ -45,6 +46,8 @@ func load_scene() -> void:
 		push_error(LOAD_START_FAILED_ERROR % path)
 		return
 	
+	print_verbose(START_LOAD_INFO % name)
+	
 	_loading_progress = 0.0
 	_state = SceneLoadingState.LOADING
 
@@ -78,13 +81,13 @@ func poll_loading_progress() -> void:
 			_loading_progress = progress[0]
 		
 		ResourceLoader.ThreadLoadStatus.THREAD_LOAD_LOADED:
+			print_verbose(LOAD_INFO % name)
+			
 			_loading_progress = 1.0
 			_scene = ResourceLoader.load_threaded_get(path)
 			_state = SceneLoadingState.LOADED
 			
 			loaded_scene.emit()
-			
-			print_verbose(LOAD_INFO % name)
 
 func instantiate() -> Scene:
 	_instance = _scene.instantiate()

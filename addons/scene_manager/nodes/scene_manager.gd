@@ -6,6 +6,7 @@ const SCENE_ADD_QUEUED_INFO: String = 			"[Scenes] %s queued for creation"
 const SCENE_REMOVE_QUEUED_INFO: String = 		"[Scenes] %s queued for deletion"
 const SCENE_INSTANTIATED_INFO: String = 		"[Scenes] %s instantiated"
 const SCENE_FREED_INFO: String = 				"[Scenes] %s freed"
+const APPLY_SCENE_DELTAS_INFO: String = 		"[Scenes] Applying scene deltas"
 const SCENE_NOT_PRELOADED_WARNING: String = 	"[Scenes] %s had not started loading before _apply_scene_deltas was called"
 const INVALID_OWNER_ERROR: String = 			"[Scenes] Invalid scene owner %s. Must be \"Global\" or the name of a currently loaded scene (%d scenes currently loaded)"
 const INVALID_TIME_SCALE_ERROR: String = 		"[Scenes] Invalid time scale %s. Setting time scale to 1.0"
@@ -96,11 +97,11 @@ func queue_add_scene(scene_name: StringName) -> void:
 		var scene_info = _get_scene_info_by_name(scene_name)
 		_queue_add.set(scene_name, scene_info)
 		
+		print_verbose(SCENE_ADD_QUEUED_INFO % scene_name)
+		
 		if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADED:
 			scene_info.load_scene()
 			_currently_loading.set(scene_name, scene_info)
-		
-		print_verbose(SCENE_ADD_QUEUED_INFO % scene_name)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -210,6 +211,8 @@ func _wait_for_queued_scenes_to_load() -> void:
 func _apply_scene_deltas() -> void:
 	await _wait_for_queued_scenes_to_load()
 	
+	print_verbose(APPLY_SCENE_DELTAS_INFO)
+	
 	for scene in _queue_add.values():
 		_add_scene(scene)
 	
@@ -227,9 +230,9 @@ func _add_scene(scene_info: SceneInfo) -> void:
 
 	scene.scene_manager = self
 	
-	_scene_parent.add_child(scene)
-	
 	print_verbose(SCENE_INSTANTIATED_INFO % scene_info.name)
+	
+	_scene_parent.add_child(scene)
 
 func _remove_scene(scene_info: SceneInfo) -> void:
 	_scene_parent.remove_child(scene_info.get_instance())
