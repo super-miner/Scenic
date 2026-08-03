@@ -8,7 +8,9 @@ func _ready() -> void:
 
 func test_2() -> void:
 	GlobalSceneManager.queue_set_scene(&"Test 2", [&"Overlay"])
-	GlobalSceneManager.with_transition(&"Fade")
+	GlobalSceneManager.with_transition_callback(func ():
+		print("Transition callback")
+	, &"Fade")
 
 func test_3() -> void:
 	GlobalSceneManager.queue_add_scene(&"Test 3")
