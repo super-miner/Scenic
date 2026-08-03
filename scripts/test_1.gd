@@ -6,6 +6,10 @@ class_name Test1 extends Scene
 func _ready() -> void:
 	GlobalSceneManager.force_load(&"Test 3", &"Test 1")
 
+func test_1() -> void:
+	GlobalSceneManager.queue_reload_scene(&"Test 1")
+	GlobalSceneManager.apply()
+
 func test_2() -> void:
 	GlobalSceneManager.queue_set_scene(&"Test 2", [&"Overlay"])
 	GlobalSceneManager.with_transition_callback(func ():

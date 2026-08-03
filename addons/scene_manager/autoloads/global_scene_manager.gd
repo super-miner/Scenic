@@ -42,6 +42,13 @@ func queue_add_scene(scene_name: StringName) -> void:
 	
 	_target_scene_manager.queue_add_scene(scene_name)
 
+func queue_reload_scene(scene_name: StringName) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.queue_reload_scene(scene_name)
+
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
