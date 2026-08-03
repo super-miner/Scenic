@@ -13,8 +13,7 @@ var scene_manager: SceneManager = null
 
 #region node_events
 func _enter_tree() -> void:
-	for tag in _tags:
-		_internal_tags.set(tag, null)
+	_create_internal_tags()
 
 #region public_functions
 func add_tag(tag: StringName) -> void:
@@ -28,3 +27,8 @@ func has_tag(tag: StringName) -> bool:
 
 func get_tags() -> Array[StringName]:
 	return _internal_tags.keys()
+
+#region private_functions
+func _create_internal_tags() -> void:
+	for tag in _tags:
+		_internal_tags.set(tag, null)

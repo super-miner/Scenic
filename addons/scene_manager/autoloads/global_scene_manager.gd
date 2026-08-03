@@ -21,37 +21,44 @@ func unregister_scene_manager(scene_manager: SceneManager) -> void:
 	
 	_target_scene_manager = null
 
-func add_scene(scene_scene: PackedScene) -> void:
+func queue_add_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.add_scene(scene_scene)
+	_target_scene_manager.queue_add_scene(scene_name)
 
-func remove_scene(scene: Scene) -> void:
+func queue_remove_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.remove_scene(scene)
+	_target_scene_manager.queue_remove_scene(scene_name)
 
-func remove_scenes(exclude_tags: Array[String] = []) -> void:
+func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.remove_scenes(exclude_tags)
+	_target_scene_manager.queue_remove_scenes(exclude_tags)
 
-func set_scene(scene_scene: PackedScene, exclude_tags: Array[String] = []) -> void:
+func queue_set_scene(scene_name: StringName, exclude_tags: Array[String] = []) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.set_scene(scene_scene, exclude_tags)
+	_target_scene_manager.queue_set_scene(scene_name, exclude_tags)
 
-func with_transition(callback: Callable, in_transition: StringName, in_time_scale: float = 1.0, out_transition: StringName = &"", out_time_scale: float = -1.0) -> void:
+func apply() -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.with_transition(callback, in_transition, in_time_scale, out_transition, out_time_scale)
+	_target_scene_manager.apply()
+
+func with_transition(in_transition: StringName, in_time_scale: float = 1.0, out_transition: StringName = &"", out_time_scale: float = -1.0) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.with_transition(in_transition, in_time_scale, out_transition, out_time_scale)

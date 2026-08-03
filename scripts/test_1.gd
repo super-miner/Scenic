@@ -4,12 +4,10 @@ class_name Test1 extends Scene
 @export var test_3_scene: PackedScene = null
 
 func test_2() -> void:
-	GlobalSceneManager.with_transition(func ():
-		GlobalSceneManager.set_scene(test_2_scene, ["Overlay"])
-	, &"Fade")
+	GlobalSceneManager.queue_set_scene(&"Test 2", [&"Overlay"])
+	GlobalSceneManager.with_transition(&"Fade")
 
 func test_3() -> void:
-	GlobalSceneManager.with_transition(func ():
-		GlobalSceneManager.add_scene(test_3_scene)
-	, &"Fade", 2.0)
+	GlobalSceneManager.queue_add_scene(&"Test 3")
+	GlobalSceneManager.with_transition(&"Fade", 2.0)
 	

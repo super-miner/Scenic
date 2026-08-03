@@ -1,15 +1,34 @@
 [gd_scene format=3 uid="uid://bwj3uukcg12p1"]
 
 [ext_resource type="Script" uid="uid://duewdbbsl6u0s" path="res://addons/scene_manager/nodes/scene_manager.gd" id="1_o5qli"]
-[ext_resource type="PackedScene" uid="uid://byryyq6ch3asf" path="res://scenes/test_1.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://y1x7ms1bt3xb" path="res://addons/scene_manager/resources/scene_info.gd" id="2_sugp2"]
 [ext_resource type="Script" uid="uid://4u0ap31txany" path="res://addons/scene_manager/nodes/transitions/fade_transition.gd" id="3_sugp2"]
+
+[sub_resource type="Resource" id="Resource_sugp2"]
+script = ExtResource("2_sugp2")
+name = &"Test 1"
+path = "uid://byryyq6ch3asf"
+initial = true
+metadata/_custom_type_script = "uid://y1x7ms1bt3xb"
+
+[sub_resource type="Resource" id="Resource_tbgi4"]
+script = ExtResource("2_sugp2")
+name = &"Test 2"
+path = "uid://dc1xjvlrkrov"
+metadata/_custom_type_script = "uid://y1x7ms1bt3xb"
+
+[sub_resource type="Resource" id="Resource_jyhfs"]
+script = ExtResource("2_sugp2")
+name = &"Test 3"
+path = "uid://6weh1qngctbc"
+metadata/_custom_type_script = "uid://y1x7ms1bt3xb"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
 bg_color = Color(1, 1, 1, 1)
 
 [node name="Main" type="Node" unique_id=483677420]
 script = ExtResource("1_o5qli")
-_initial_scenes = Array[PackedScene]([ExtResource("2_0wfyh")])
+_scenes = Array[ExtResource("2_sugp2")]([SubResource("Resource_sugp2"), SubResource("Resource_tbgi4"), SubResource("Resource_jyhfs")])
 metadata/_custom_type_script = "uid://duewdbbsl6u0s"
 
 [node name="Fade" type="CanvasLayer" parent="." unique_id=1243219569 node_paths=PackedStringArray("_curtain")]
