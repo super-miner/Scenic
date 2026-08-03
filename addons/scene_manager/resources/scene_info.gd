@@ -26,7 +26,7 @@ signal loaded_scene
 @export var load_on_start: bool = false
 
 #region references
-var owner: Scene = null
+var owner: StringName = &""
 var _scene: PackedScene = null
 var _instance: Scene = null
 

@@ -61,7 +61,7 @@ func _process(_delta: float) -> void:
 
 #region public_functions
 func force_load(scene_name: StringName, scene_owner: StringName = &"Global") -> void:
-	if scene_owner != &"Global" && (scene_owner == null || !_active_scenes.has(scene_owner)):
+	if scene_owner != &"Global" && !_active_scenes.has(scene_owner):
 		push_error(INVALID_OWNER_ERROR % [scene_owner, _active_scenes.size()])
 		return
 	
@@ -75,11 +75,11 @@ func force_load(scene_name: StringName, scene_owner: StringName = &"Global") -> 
 func force_unload(scene_name: StringName) -> void:
 	var scene_info = _get_scene_info_by_name(scene_name)
 	
-	if scene_info.owner == null:
+	if scene_info.owner == &"":
 		return
 	
 	_force_loaded.get(scene_info.owner).erase(scene_name)
-	scene_info.owner = null
+	scene_info.owner = &""
 	
 	if !_active_scenes.has(scene_name):
 		scene_info.unload_scene()
@@ -114,10 +114,6 @@ func queue_remove_scene(scene_name: StringName) -> void:
 		_queue_remove.set(scene_name, scene_info)
 		
 		print_verbose(SCENE_REMOVE_QUEUED_INFO % scene_name)
-	
-	if scene_info.owner != &"Global" && !_active_scenes.has(scene_info.owner):
-		scene_info.unload_scene() # Cancel scene loading
-		_currently_loading.erase(scene_name)
 
 func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
@@ -246,6 +242,10 @@ func _remove_scene(scene_info: SceneInfo) -> void:
 		var owned_info = _get_scene_info_by_name(owned_name)
 		owned_info.unload_scene() # Cancel scene loading
 		_currently_loading.erase(owned_name)
+	
+	if scene_info.owner != &"Global" && !_active_scenes.has(scene_info.owner):
+		scene_info.unload_scene() # Cancel scene loading
+		_currently_loading.erase(scene_info.name)
 	
 	_active_scenes.erase(scene_info.name)
 	_force_loaded.erase(scene_info.name)
