@@ -1,13 +1,9 @@
 [gd_scene format=3 uid="uid://byryyq6ch3asf"]
 
 [ext_resource type="Script" uid="uid://b331n753cv2bb" path="res://scripts/test_1.gd" id="1_p1gcm"]
-[ext_resource type="PackedScene" uid="uid://dc1xjvlrkrov" path="res://scenes/test_2.tscn" id="2_b5onc"]
-[ext_resource type="PackedScene" uid="uid://6weh1qngctbc" path="res://scenes/test_3.tscn" id="3_uxpu0"]
 
 [node name="Test1" type="Node" unique_id=133889666]
 script = ExtResource("1_p1gcm")
-test_2_scene = ExtResource("2_b5onc")
-test_3_scene = ExtResource("3_uxpu0")
 metadata/_custom_type_script = "uid://dpxn232fvunp8"
 
 [node name="Control" type="Control" parent="." unique_id=245834049]
@@ -47,6 +43,7 @@ layout_mode = 2
 text = "Test 3"
 
 [node name="HSlider" type="HSlider" parent="Control/CenterContainer/VBoxContainer" unique_id=2055973910]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 

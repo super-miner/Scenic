@@ -35,19 +35,19 @@ func force_unload(scene_name: StringName) -> void:
 	
 	_target_scene_manager.force_unload(scene_name)
 
-func queue_add_scene(scene_name: StringName) -> void:
+func queue_add_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.queue_add_scene(scene_name)
+	_target_scene_manager.queue_add_scene(scene_name, data)
 
-func queue_reload_scene(scene_name: StringName) -> void:
+func queue_reload_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.queue_reload_scene(scene_name)
+	_target_scene_manager.queue_reload_scene(scene_name, data)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
@@ -63,12 +63,12 @@ func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 	
 	_target_scene_manager.queue_remove_scenes(exclude_tags)
 
-func queue_set_scene(scene_name: StringName, exclude_tags: Array[String] = []) -> void:
+func queue_set_scene(scene_name: StringName, data: Variant = null, exclude_tags: Array[String] = []) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
-	_target_scene_manager.queue_set_scene(scene_name, exclude_tags)
+	_target_scene_manager.queue_set_scene(scene_name, data, exclude_tags)
 
 func apply() -> void:
 	if _target_scene_manager == null:

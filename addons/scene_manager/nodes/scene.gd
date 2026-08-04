@@ -12,6 +12,9 @@ var _internal_tags: Dictionary = {}
 var scene_manager: SceneManager = null
 
 #region node_events
+func _start(data: Variant) -> void:
+	pass
+
 func _enter_tree() -> void:
 	_create_internal_tags()
 

@@ -37,8 +37,8 @@ var _transitions: Dictionary = {}
 
 #region state
 var _state: SceneChangeState = SceneChangeState.NONE
-var _queue_add: Dictionary = {} #{<scene_name>: <scene_info>}
-var _queue_reload: Dictionary = {} #{<scene_name>: <scene_info>}
+var _queue_add: Dictionary = {} #{<scene_name>: {info: <scene_info>, data: <data>}}
+var _queue_reload: Dictionary = {} #{<scene_name>: {info: <scene_info>, data: <data>}}
 var _queue_remove: Dictionary = {} #{<scene_name>: <scene_info>}
 var _currently_loading: Dictionary = {} #{<scene_name>: <scene_info>}
 var _force_loaded: Dictionary = {&"Global": {}} #{<owner_scene_name>: {<scene_name>: null}}
@@ -87,7 +87,7 @@ func force_unload(scene_name: StringName) -> void:
 	if !_active_scenes.has(scene_name):
 		_unload_scene(scene_info)
 
-func queue_add_scene(scene_name: StringName) -> void:
+func queue_add_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
 		push_error(SCENE_ADD_IN_PROGRESS_ERROR)
 		return
@@ -96,7 +96,7 @@ func queue_add_scene(scene_name: StringName) -> void:
 		_queue_remove.erase(scene_name)
 	elif !_active_scenes.has(scene_name):
 		var scene_info = _get_scene_info_by_name(scene_name)
-		_queue_add.set(scene_name, scene_info)
+		_queue_add.set(scene_name, {"info": scene_info, "data": data})
 		
 		print_verbose(SCENE_ADD_QUEUED_INFO % scene_name)
 		
@@ -105,7 +105,7 @@ func queue_add_scene(scene_name: StringName) -> void:
 	else:
 		push_warning(SCENE_ADD_EXISTS_WARNING)
 
-func queue_reload_scene(scene_name: StringName) -> void:
+func queue_reload_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
 		push_error(SCENE_RELOAD_IN_PROGRESS_ERROR)
 		return
@@ -114,7 +114,7 @@ func queue_reload_scene(scene_name: StringName) -> void:
 		_queue_remove.erase(scene_name)
 	elif _active_scenes.has(scene_name):
 		var scene_info = _get_scene_info_by_name(scene_name)
-		_queue_reload.set(scene_name, scene_info)
+		_queue_reload.set(scene_name, {"info": scene_info, "data": data})
 		
 		print_verbose(SCENE_RELOAD_QUEUED_INFO % scene_name)
 	else:
@@ -153,13 +153,13 @@ func queue_remove_scenes(exclude_tags: Array[String] = []) -> void:
 		if should_remove:
 			queue_remove_scene(scene_info.name)
 
-func queue_set_scene(scene_name: StringName, exclude_tags: Array[String] = []) -> void:
+func queue_set_scene(scene_name: StringName, data: Variant = null, exclude_tags: Array[String] = []) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
 		push_error(SCENE_SET_IN_PROGRESS_ERROR)
 		return
 	
 	queue_remove_scenes(exclude_tags)
-	queue_add_scene(scene_name)
+	queue_add_scene(scene_name, data)
 
 func apply() -> void:
 	_state = SceneChangeState.IN_PROGRESS
@@ -223,7 +223,8 @@ func _poll_currently_loading() -> void:
 			_currently_loading.erase(scene_name)
 
 func _wait_for_queued_scenes_to_load() -> void:
-	for scene_info in _queue_add.values():
+	for scene_value in _queue_add.values():
+		var scene_info = scene_value["info"]
 		if scene_info.get_state() == SceneInfo.SceneLoadingState.NOT_LOADED:
 			push_warning(SCENE_NOT_PRELOADED_WARNING % scene_info.name)
 			_load_scene(scene_info) # This is just a fallback incase it didn't start loading when queued
@@ -236,15 +237,16 @@ func _apply_scene_deltas() -> void:
 	
 	print_verbose(APPLY_SCENE_DELTAS_INFO)
 	
-	for scene in _queue_reload.values():
-		_reload_scene(scene)
+	for scene_value in _queue_reload.values():
+		_reload_scene(scene_value["info"], scene_value["data"])
 	
-	for scene in _queue_add.values():
-		_add_scene(scene)
+	for scene_value in _queue_add.values():
+		_add_scene(scene_value["info"], scene_value["data"])
 	
-	for scene in _queue_remove.values():
-		_remove_scene(scene)
+	for scene_info in _queue_remove.values():
+		_remove_scene(scene_info)
 	
+	_queue_reload.clear()
 	_queue_add.clear()
 	_queue_remove.clear()
 
@@ -256,7 +258,7 @@ func _unload_scene(scene_info: SceneInfo) -> void:
 	scene_info.unload_scene()
 	_currently_loading.erase(scene_info.name)
 
-func _add_scene(scene_info: SceneInfo) -> void:
+func _add_scene(scene_info: SceneInfo, data: Variant) -> void:
 	_active_scenes.set(scene_info.name, scene_info)
 	_force_loaded.set(scene_info.name, {})
 	
@@ -266,9 +268,10 @@ func _add_scene(scene_info: SceneInfo) -> void:
 	
 	print_verbose(SCENE_INSTANTIATED_INFO % scene_info.name)
 	
+	scene._start(data)
 	_scene_parent.add_child(scene)
 
-func _reload_scene(scene_info: SceneInfo) -> void:
+func _reload_scene(scene_info: SceneInfo, data: Variant) -> void:
 	_scene_parent.remove_child(scene_info.get_instance())
 	scene_info.queue_free()
 	
@@ -281,6 +284,7 @@ func _reload_scene(scene_info: SceneInfo) -> void:
 	
 	print_verbose(SCENE_RELOADED_INFO % scene_info.name)
 	
+	scene._start(data)
 	_scene_parent.add_child(scene)
 
 func _remove_scene(scene_info: SceneInfo) -> void:
