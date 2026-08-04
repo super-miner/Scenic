@@ -37,7 +37,12 @@ Once you have your main scene setup make sure to make it the default scene in `P
 ## Adding Scenes
 You can add scenes to your scene manager by dragging them onto the scenes list in the inspector.
 
+> [!WARNING]
+> The root node of any scene **must** be of type `Scene`.
+
 [IMAGE HERE]
+
+*The scenes list on a scene manager with multiple scenes added.*
 
 From here you can set the properties of your scenes including:
 
@@ -82,7 +87,8 @@ func _on_level_1_finished() -> void:
   GlobalSceneManager.queue_add_scene(&"Level 2")
   GlobalSceneManager.apply()
 
-  # Alternative code using queue_set_scene's exclude functionality. This code assumes that all scenes we want to keep have the "UI" tag applied in the inspector.
+  # Alternative code using queue_set_scene's exclude functionality.
+  # This code assumes that all scenes we want to keep have the "UI" tag applied in the inspector.
   GlobalSceneManager.queue_set_scene(&"Level 2", [&"UI"])
   GlobalSceneManager.apply()
 ```
@@ -96,7 +102,9 @@ func _on_level_1_finished() -> void:
 > ```
 
 ### Queuing
-As I am sure you have noticed all of the scene change methods start with `queue_...` and we have to call `apply` every time we want to apply the changes. The reasons why will be covered in detail in the [Transitions](https://github.com/super-miner/scene-manager-addon/README.md#transitions) section, for now just know that you must queue up all of your changes first and then apply them after.
+As I'm sure you have noticed, Scenic doesn't allow you to directly perform scene operations like `set_scene`, `add_scene`, etc. instead requiring you to queue them up and then apply them with `apply()`. This is because Scenic handles asynchronous scene loading automatically and queuing allows it to start loading the scenes *before* they need to be instantiated.
+
+This will be especially useful when we start talking about scene transitions because the scenes can start loading at the beginning of the transition animation.
 
 ## Transitions
 
