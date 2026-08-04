@@ -34,14 +34,11 @@ Make sure your SceneManager node has `global` set to `true`. Scenic lets you use
 
 Once you have your main scene setup make sure to make it the default scene in `Project Settings > General > Application > Run > Main Scene`.
 
-## Creating Scenes
-TODO
+## Adding Scenes
+You can add scenes to your scene manager by dragging them onto the scenes list in the inspector.
 
 > [!WARNING]
 > The root node of any scene **must** be of type `Scene`.
-
-## Adding Scenes
-You can add scenes to your scene manager by dragging them onto the scenes list in the inspector.
 
 [IMAGE HERE]
 
