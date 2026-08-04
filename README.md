@@ -83,19 +83,19 @@ This allows you to do things like swap out the current level without swapping ou
 
 ```gdscript
 func _ready() -> void:
-  GlobalSceneManager.queue_remove_scenes()
-  GlobalSceneManager.queue_add_scenes([&"Level 1", &"HUD", &"Pause Menu"])
-  GlobalSceneManager.apply()
+	GlobalSceneManager.queue_remove_scenes()
+	GlobalSceneManager.queue_add_scenes([&"Level 1", &"HUD", &"Pause Menu"])
+	GlobalSceneManager.apply()
 
 func _on_level_1_finished() -> void:
-  GlobalSceneManager.queue_remove_scene(&"Level 1")
-  GlobalSceneManager.queue_add_scene(&"Level 2")
-  GlobalSceneManager.apply()
+	GlobalSceneManager.queue_remove_scene(&"Level 1")
+	GlobalSceneManager.queue_add_scene(&"Level 2")
+	GlobalSceneManager.apply()
 
-  # Alternative code using queue_set_scene's exclude functionality.
-  # This code assumes that all scenes we want to keep have the "UI" tag applied in the inspector.
-  GlobalSceneManager.queue_set_scene(&"Level 2", [&"UI"])
-  GlobalSceneManager.apply()
+	# Alternative code using queue_set_scene's exclude functionality.
+	# This code assumes that all scenes we want to keep have the "UI" tag applied in the inspector.
+	GlobalSceneManager.queue_set_scene(&"Level 2", [&"UI"])
+	GlobalSceneManager.apply()
 ```
 
 > [!NOTE]
