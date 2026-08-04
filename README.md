@@ -159,8 +159,31 @@ func set_out() -> void:
 
 If you want to use the fade transition as a reference you can find it in `res://assets/scenic/nodes/transitions`.
 
-## Passing Data (to New Scenes)
+## Passing Data (to new scenes)
+Scenic allows you to pass data along whenever you add, set, or reload a scene using the `data` parameter like this.
 
+```gdscript
+var important_data_1 = 42.0
+
+var important_data_2 = {
+	"name": "John",
+	"health": 100.0
+}
+
+GlobalSceneManager.queue_set_scene(&"Scene 2", important_data_1)
+GlobalSceneManager.queue_add_scene(&"Scene 3", important_data_2)
+GlobalSceneManager.apply()
+```
+
+This data can then be received by the scene by having it implement the `_start` method.
+
+```gdscript
+@icon("res://addons/scenic/icons/clapperboard.svg")
+class_name Scene2Class extends Scene
+
+func _start(data: Variant) -> void:
+	print("Data received: %d" % data)
+```
 
 ## Force Loading
 
