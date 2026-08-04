@@ -1,4 +1,6 @@
 # Scenic
+[IMAGE HERE]
+
 A scene manager addon for Godot. Handles changing scenes, managing transitions, and asynchronous loading all with a simple but flexible API.
 
 # Installation
@@ -63,6 +65,9 @@ GlobalSceneManager.queue_set_scene(&"Scene 2")
 GlobalSceneManager.apply()
 ```
 
+> [!TIP]
+> If you don't like typing `&` in front of all your strings, you don't have to! The `&` is used to mark the string as a `StringName` but it isn't required by Godot.
+
 Technically you could stop here and you would be able to manage your scenes, but you'd be missing out on a lot of the benefits of using Scenic.
 
 Before we go any further it is important to explain a few points about how the scene manager handles scenes.
@@ -107,7 +112,28 @@ As I'm sure you have noticed, Scenic doesn't allow you to directly perform scene
 This will be especially useful when we start talking about scene transitions because the scenes can start loading at the beginning of the transition animation.
 
 ## Transitions
+One important feature of Scenic is that it can handle scene transitions for you. To set up a scene transition all you need to do is add it as a child of the scene manager.
 
+To start we will walk through the set up for the built in `FadeTransition` and then after that we will talk about making custom transitions.
+
+### Fade Transition
+To create a fade transition add a `FadeTransition` node as a child of your scene manager. It should look something like this.
+
+[IMAGE HERE]
+
+> [!NOTE]
+> In this example we rename our `FadeTransition` to "Fade" for easy access later.
+
+Looking at the `FadeTransition` in the inspector we can see that it takes in a curtain reference as well as a few other settings. The curtain is the control node that will fade in when we do the transition. Add a `Panel` node as a child and drag it into the curtain slot.
+
+[IMAGE HERE]
+
+To use the fade transition, replace your call to `apply()` with a call to `with_transition()` like this.
+
+```gdscript
+GlobalSceneManager.queue_set_scene(&"Scene 2")
+GlobalSceneManager.with_transition(&"Fade") # The name used to reference the transition here is the name of the SceneTransition node.
+```
 
 ### Custom Transitions
 
@@ -119,6 +145,10 @@ This will be especially useful when we start talking about scene transitions bec
 
 
 ## Debugging
+
+
+## Multiple Scene Managers
+
 
 
 
