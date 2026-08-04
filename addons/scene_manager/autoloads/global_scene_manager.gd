@@ -7,6 +7,15 @@ const RE_REGISTER_SCENE_ERROR: String = "[Scenes] Multiple global scene managers
 #region references
 var _target_scene_manager: SceneManager = null
 
+#region node_events
+func _enter_tree() -> void:
+	Performance.add_custom_monitor("global_scene_manager/scenes_loaded", _get_loaded_scenes_count)
+	Performance.add_custom_monitor("global_scene_manager/scenes_active", _get_active_scenes_count)
+
+func _exit_tree() -> void:
+	Performance.remove_custom_monitor("global_scene_manager/scenes_loaded")
+	Performance.remove_custom_monitor("global_scene_manager/scenes_active")
+
 #region public_functions
 func register_scene_manager(scene_manager: SceneManager) -> void:
 	if _target_scene_manager != null:
@@ -90,3 +99,10 @@ func with_transition_callback(callback: Callable, in_transition: StringName, in_
 		return
 	
 	_target_scene_manager.with_transition_callback(callback, in_transition, in_time_scale, out_transition, out_time_scale)
+
+#region private_functions
+func _get_loaded_scenes_count() -> int:
+	return 0 if _target_scene_manager == null else _target_scene_manager.get_loaded_scenes_count()
+
+func _get_active_scenes_count() -> int:
+	return 0 if _target_scene_manager == null else _target_scene_manager.get_active_scenes_count()

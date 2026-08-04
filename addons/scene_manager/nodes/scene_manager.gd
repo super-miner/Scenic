@@ -42,6 +42,8 @@ var _queue_reload: Dictionary = {} #{<scene_name>: {info: <scene_info>, data: <d
 var _queue_remove: Dictionary = {} #{<scene_name>: <scene_info>}
 var _currently_loading: Dictionary = {} #{<scene_name>: <scene_info>}
 var _force_loaded: Dictionary = {&"Global": {}} #{<owner_scene_name>: {<scene_name>: null}}
+var _loaded_scenes_count: int = 0
+var _active_scenes_count: int = 0
 
 #region node_events
 func _ready() -> void:
@@ -202,6 +204,12 @@ func register_transition(transition: SceneTransition) -> void:
 func unregister_transition(transition: SceneTransition) -> void:
 	_transitions.erase(transition.name)
 
+func get_loaded_scenes_count() -> int:
+	return _loaded_scenes_count
+
+func get_active_scenes_count() -> int:
+	return _active_scenes_count
+
 #region private_functions
 func _create_scene_parent() -> void:
 	_scene_parent = Node.new()
@@ -221,6 +229,7 @@ func _poll_currently_loading() -> void:
 		scene_info.poll_loading_progress()
 		if scene_info.get_state() != SceneInfo.SceneLoadingState.LOADING:
 			_currently_loading.erase(scene_name)
+			_loaded_scenes_count += 1
 
 func _wait_for_queued_scenes_to_load() -> void:
 	for scene_value in _queue_add.values():
@@ -255,6 +264,9 @@ func _load_scene(scene_info: SceneInfo) -> void:
 	_currently_loading.set(scene_info.name, scene_info)
 
 func _unload_scene(scene_info: SceneInfo) -> void:
+	if scene_info.get_state() == SceneInfo.SceneLoadingState.LOADED:
+		_loaded_scenes_count -= 1
+	
 	scene_info.unload_scene()
 	_currently_loading.erase(scene_info.name)
 
@@ -267,6 +279,8 @@ func _add_scene(scene_info: SceneInfo, data: Variant) -> void:
 	scene.scene_manager = self
 	
 	print_verbose(SCENE_INSTANTIATED_INFO % scene_info.name)
+	
+	_active_scenes_count += 1
 	
 	scene._start(data)
 	_scene_parent.add_child(scene)
@@ -305,3 +319,5 @@ func _remove_scene(scene_info: SceneInfo) -> void:
 	_force_loaded.erase(scene_info.name)
 	
 	print_verbose(SCENE_FREED_INFO % scene_info.name)
+	
+	_active_scenes_count -= 1
