@@ -136,7 +136,28 @@ GlobalSceneManager.with_transition(&"Fade") # The name used to reference the tra
 ```
 
 ### Custom Transitions
+You can also create your own custom transitions. In Scenic transitions are just a type of node so you can create your own by creating a class that extends `SceneTransition`.
 
+```gdscript
+# Include a reference to the icon in all transitions otherwise it will have the wrong icon.
+@icon("res://addons/scenic/icons/fast_forward.svg")
+class_name MyCustomTransition extends SceneTransition
+
+# Required functions, all transitions must implement these.
+func transition_in(time_scale: float = 1.0) -> void:
+	# ... do transition in to transition screen
+
+func set_in() -> void:
+	# ... instantly set state to transition screen showing
+
+func transition_out(time_scale: float = 1.0) -> void:
+	# ... do transition out of transition screen
+
+func set_out() -> void:
+	# ... instantly set state to transition screen hidden
+```
+
+If you want to use the fade transition as a reference you can find it in `res://assets/scenic/nodes/transitions`.
 
 ## Passing Data (to New Scenes)
 
