@@ -1,5 +1,5 @@
 # Scenic
-[IMAGE HERE]
+![Logo](https://github.com/super-miner/Scenic/blob/main/banner.png)
 
 A scene manager addon for Godot. Handles changing scenes, managing transitions, and asynchronous loading all with a simple but flexible API.
 
