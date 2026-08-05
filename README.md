@@ -28,7 +28,7 @@ Scenic works by completely circumventing the regular Godot scene system. Project
 It is recommended that the root node of your main scene is a `SceneManager`. The scene manager is responsible for managing things like loading and instantiating scenes as well as things like scene transitions.
 
 ## Creating the Main Scene
-[IMAGE HERE]
+![Scene Manager Setup](https://github.com/super-miner/Scenic/blob/main/scene_manager_setup.png)
 
 *A basic scene manager set-up with one transition. See [Transitions](https://github.com/super-miner/Scenic#transitions)  for more information about creating transitions.*
 
@@ -42,9 +42,7 @@ You can add scenes to your scene manager by dragging them onto the scenes list i
 > [!WARNING]
 > The root node of any scene **must** be of type `Scene`.
 
-[IMAGE HERE]
-
-*The scenes list on a scene manager with multiple scenes added.*
+![Scenes List](https://github.com/super-miner/Scenic/blob/main/scenes_list.png)
 
 From here you can set the properties of your scenes including:
 
@@ -119,14 +117,14 @@ To start we will walk through the set up for the built in `FadeTransition` and t
 ### Fade Transition
 To create a fade transition add a `FadeTransition` node as a child of your scene manager. It should look something like this.
 
-[IMAGE HERE]
+![Transition Setup](https://github.com/super-miner/Scenic/blob/main/transition_setup.png)
 
 > [!NOTE]
 > In this example we rename our `FadeTransition` to "Fade" for easy access later.
 
 Looking at the `FadeTransition` in the inspector we can see that it takes in a curtain reference as well as a few other settings. The curtain is the control node that will fade in when we do the transition. Add a `Panel` node as a child and drag it into the curtain slot.
 
-[IMAGE HERE]
+![Transition Setup](https://github.com/super-miner/Scenic/blob/main/scene_manager_setup.png)
 
 To use the fade transition, replace your call to `apply()` with a call to `with_transition()` like this.
 
