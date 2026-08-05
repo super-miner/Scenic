@@ -185,15 +185,27 @@ func _start(data: Variant) -> void:
 
 ## Force Loading
 > [!WARNING]
-> This section of the documentation is unfinished.
+> This section of the documentation is under construction.
 
 ## Debugging
 > [!WARNING]
-> This section of the documentation is unfinished.
+> This section of the documentation is under construction.
 
 ## Multiple Scene Managers
 > [!WARNING]
-> This section of the documentation is unfinished.
+> This section of the documentation is under construction.
+
+# Contributing
+> [!WARNING]
+> This section will be added later.
+
+# Getting Help
+* If you are struggling with using Scenic, feel free to ask for help in my [Discord server](https://flowndev.com/discord).
+* If you have found a bug or issue with the addon, please create an [issue](https://github.com/super-miner/Scenic/issues).
+
+# Credits
+* **Node icons & logo** from [@icons](https://github.com/Voxybuns/at-icons)
+* **Background image** from [ClickerHappy](https://www.pexels.com/photo/photo-of-mountains-during-sunset-777211/)
 
 
 
