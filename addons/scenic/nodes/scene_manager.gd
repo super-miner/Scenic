@@ -107,6 +107,17 @@ func queue_add_scene(scene_name: StringName, data: Variant = null) -> void:
 	else:
 		push_warning(SCENE_ADD_EXISTS_WARNING)
 
+func queue_add_scenes(scene_names: Array[StringName], datas: Array[Variant] = []) -> void:
+	if _state == SceneChangeState.IN_PROGRESS:
+		push_error(SCENE_REMOVE_IN_PROGRESS_ERROR)
+		return
+	
+	for i in range(scene_names.size()):
+		var scene_name = scene_names[i]
+		var data = datas[i] if i < datas.size() else null
+		
+		queue_add_scene(scene_name, data)
+
 func queue_reload_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:
 		push_error(SCENE_RELOAD_IN_PROGRESS_ERROR)
@@ -121,6 +132,17 @@ func queue_reload_scene(scene_name: StringName, data: Variant = null) -> void:
 		print_verbose(SCENE_RELOAD_QUEUED_INFO % scene_name)
 	else:
 		push_warning(SCENE_RELOAD_NOT_EXISTS_WARNING)
+
+func queue_reload_scenes(scene_names: Array[StringName], datas: Array[Variant] = []) -> void:
+	if _state == SceneChangeState.IN_PROGRESS:
+		push_error(SCENE_REMOVE_IN_PROGRESS_ERROR)
+		return
+	
+	for i in range(scene_names.size()):
+		var scene_name = scene_names[i]
+		var data = datas[i] if i < datas.size() else null
+		
+		queue_reload_scene(scene_name, data)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _state == SceneChangeState.IN_PROGRESS:

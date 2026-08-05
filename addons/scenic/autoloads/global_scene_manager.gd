@@ -51,12 +51,26 @@ func queue_add_scene(scene_name: StringName, data: Variant = null) -> void:
 	
 	_target_scene_manager.queue_add_scene(scene_name, data)
 
+func queue_add_scenes(scene_names: Array[StringName], datas: Array[Variant] = []) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.queue_add_scenes(scene_names, datas)
+
 func queue_reload_scene(scene_name: StringName, data: Variant = null) -> void:
 	if _target_scene_manager == null:
 		push_error(NO_GLOBAL_MANAGER_ERROR)
 		return
 	
 	_target_scene_manager.queue_reload_scene(scene_name, data)
+
+func queue_reload_scenes(scene_names: Array[StringName], datas: Array[Variant] = []) -> void:
+	if _target_scene_manager == null:
+		push_error(NO_GLOBAL_MANAGER_ERROR)
+		return
+	
+	_target_scene_manager.queue_reload_scenes(scene_names, datas)
 
 func queue_remove_scene(scene_name: StringName) -> void:
 	if _target_scene_manager == null:
