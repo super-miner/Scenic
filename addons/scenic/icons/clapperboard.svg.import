@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djbv3h7ly8grf"
-path="res://.godot/imported/fast_forward.svg-cec8bec1d6e211862c017e36f30a30f0.ctex"
+uid="uid://dmtninifa3jfx"
+path="res://.godot/imported/clapperboard.svg-76128581962265bfe8f4a7c4ae2a7535.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/scene_manager/icons/fast_forward.svg"
-dest_files=["res://.godot/imported/fast_forward.svg-cec8bec1d6e211862c017e36f30a30f0.ctex"]
+source_file="res://addons/scenic/icons/clapperboard.svg"
+dest_files=["res://.godot/imported/clapperboard.svg-76128581962265bfe8f4a7c4ae2a7535.ctex"]
 
 [params]
 

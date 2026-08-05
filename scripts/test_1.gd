@@ -7,11 +7,11 @@ func _ready() -> void:
 	GlobalSceneManager.force_load(&"Test 3", &"Test 1")
 
 func test_1() -> void:
-	GlobalSceneManager.queue_reload_scene(&"Test 1", %HSlider.value)
+	GlobalSceneManager.queue_reload_scene("Test 1", %HSlider.value)
 	GlobalSceneManager.apply()
 
 func test_2() -> void:
-	GlobalSceneManager.queue_set_scene(&"Test 2", %HSlider.value, [&"Overlay"])
+	GlobalSceneManager.queue_set_scene("Test 2", %HSlider.value, [&"Overlay"])
 	GlobalSceneManager.with_transition_callback(func ():
 		print("Transition callback")
 	, &"Fade")

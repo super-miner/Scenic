@@ -1,8 +1,8 @@
 extends Node
 
 #region constants
-const NO_GLOBAL_MANAGER_ERROR: String = "[Scenes] Attempting to perform a global scene operation with no global scene manager"
-const RE_REGISTER_SCENE_ERROR: String = "[Scenes] Multiple global scene managers defined. Undefined behaviour."
+const NO_GLOBAL_MANAGER_ERROR: String = "[Scenic] Attempting to perform a global scene operation with no global scene manager"
+const RE_REGISTER_SCENE_ERROR: String = "[Scenic] Multiple global scene managers defined. Undefined behaviour."
 
 #region references
 var _target_scene_manager: SceneManager = null

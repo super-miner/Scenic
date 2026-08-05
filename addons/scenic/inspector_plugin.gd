@@ -2,7 +2,7 @@
 extends EditorInspectorPlugin
 
 #region references
-var _scenes_inspector = preload("res://addons/scene_manager/inspectors/scenes_inspector.gd")
+var _scenes_inspector = preload("res://addons/scenic/inspectors/scenes_inspector.gd")
 
 #region node_events
 func _can_handle(object: Object) -> bool:

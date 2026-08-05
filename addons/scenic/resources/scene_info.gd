@@ -1,14 +1,14 @@
 class_name SceneInfo extends Resource
 
 #region constants
-const START_LOAD_INFO: String = 					"[Scenes] %s started loading"
-const LOAD_INFO: String = 							"[Scenes] %s loaded"
-const UNLOAD_INFO: String = 						"[Scenes] %s unloaded"
-const RELOAD_WARNING: String = 						"[Scenes] Attempting to load \"%s\" after it has already been loaded"
-const UNLOAD_NOTHING_WARNING: String = 				"[Scenes] Attempting to unload \"%s\" when it is already unloaded"
-const LOAD_START_FAILED_ERROR: String = 			"[Scenes] Failed to start loading the scene from path \"%s\""
-const LOAD_FAILED_ERROR: String = 					"[Scenes] Failed to load the scene from path \"%s\""
-const LOAD_FAILED_INVALID_RESOURCE_ERROR: String = 	"[Scenes] Failed to load the scene from path \"%s\" (Invalid resource)"
+const START_LOAD_INFO: String = 					"[Scenic] %s started loading"
+const LOAD_INFO: String = 							"[Scenic] %s loaded"
+const UNLOAD_INFO: String = 						"[Scenic] %s unloaded"
+const RELOAD_WARNING: String = 						"[Scenic] Attempting to load \"%s\" after it has already been loaded"
+const UNLOAD_NOTHING_WARNING: String = 				"[Scenic] Attempting to unload \"%s\" when it is already unloaded"
+const LOAD_START_FAILED_ERROR: String = 			"[Scenic] Failed to start loading the scene from path \"%s\""
+const LOAD_FAILED_ERROR: String = 					"[Scenic] Failed to load the scene from path \"%s\""
+const LOAD_FAILED_INVALID_RESOURCE_ERROR: String = 	"[Scenic] Failed to load the scene from path \"%s\" (Invalid resource)"
 
 #region enums
 enum SceneLoadingState {

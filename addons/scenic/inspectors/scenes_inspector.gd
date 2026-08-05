@@ -4,8 +4,10 @@ extends EditorProperty
 #region constants
 var DUPLICATE_NAME_INDEX_REGEX: RegEx = RegEx.create_from_string("_(\\d+)$")
 
+const NAME_DESYNC_ERROR: String = "[Scenic] Desync between name key and name found (name key: %s, name: %s)"
+
 #region references
-var _droppable_tree = preload("res://addons/scene_manager/inspectors/droppable_tree.gd")
+var _droppable_tree = preload("res://addons/scenic/inspectors/droppable_tree.gd")
 var _editor_theme: Theme = null
 var _tree: Tree = null
 
@@ -158,7 +160,7 @@ func _update_list() -> void:
 		var scene_info = _scenes.get(scene_name)
 		
 		if scene_name != scene_info.name:
-			printerr("Desync between name key and name found (name key: %s, name: %s)" % [scene_name, scene_info.name])
+			printerr(NAME_DESYNC_ERROR % [scene_name, scene_info.name])
 		
 		var item = _tree.create_item(root)
 		item.set_metadata(0, scene_name)
@@ -167,7 +169,7 @@ func _update_list() -> void:
 		item.set_icon(1, _editor_theme.get_icon("PackedScene", "EditorIcons"))
 		item.add_button(1, _editor_theme.get_icon("AutoPlay", "EditorIcons"), 0, false, "Initial")
 		item.set_button_color(1, 0, Color(1.0, 1.0, 1.0, 1.0 if scene_info.initial else 0.5))
-		item.add_button(1, _editor_theme.get_icon("ResourcePreloader", "EditorIcons"), 1, false, "Load on Start")
+		item.add_button(1, _editor_theme.get_icon("Environment", "EditorIcons"), 1, false, "Load on Start")
 		item.set_button_color(1, 1, Color(1.0, 1.0, 1.0, 1.0 if scene_info.load_on_start else 0.5))
 		item.add_button(1, _editor_theme.get_icon("Remove", "EditorIcons"), 2, false, "Remove")
 		

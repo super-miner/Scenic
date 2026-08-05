@@ -1,4 +1,4 @@
-@icon("res://addons/scene_manager/icons/clapperboard.svg")
+@icon("res://addons/scenic/icons/clapperboard.svg")
 class_name Scene extends Node
 
 #region exports

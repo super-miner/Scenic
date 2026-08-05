@@ -1,4 +1,4 @@
-@icon("res://addons/scene_manager/icons/fast_forward.svg")
+@icon("res://addons/scenic/icons/fast_forward.svg")
 class_name FadeTransition extends SceneTransition
 
 #region exports

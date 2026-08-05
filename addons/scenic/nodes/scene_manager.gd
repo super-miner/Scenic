@@ -1,24 +1,24 @@
-@icon("res://addons/scene_manager/icons/layers.svg")
+@icon("res://addons/scenic/icons/layers.svg")
 class_name SceneManager extends Node
 
 #region constants
-const SCENE_ADD_QUEUED_INFO: String = 			"[Scenes] %s queued for creation"
-const SCENE_RELOAD_QUEUED_INFO: String = 		"[Scenes] %s queued for reloading"
-const SCENE_REMOVE_QUEUED_INFO: String = 		"[Scenes] %s queued for deletion"
-const SCENE_INSTANTIATED_INFO: String = 		"[Scenes] %s instantiated"
-const SCENE_RELOADED_INFO: String = 			"[Scenes] %s reloaded"
-const SCENE_FREED_INFO: String = 				"[Scenes] %s freed"
-const APPLY_SCENE_DELTAS_INFO: String = 		"[Scenes] Applying scene deltas"
-const SCENE_ADD_EXISTS_WARNING: String = 		"[Scenes] Attempted to add a scene when it was already added and not queued for removal"
-const SCENE_RELOAD_NOT_EXISTS_WARNING: String = "[Scenes] Attempted to reload a scene that was not added"
-const SCENE_REMOVE_NOT_EXISTS_WARNING: String = "[Scenes] Attempted to remove a scene that was not added"
-const SCENE_NOT_PRELOADED_WARNING: String = 	"[Scenes] %s had not started loading before _apply_scene_deltas was called"
-const INVALID_OWNER_ERROR: String = 			"[Scenes] Invalid scene owner %s. Must be \"Global\" or the name of a currently loaded scene (%d scenes currently loaded)"
-const INVALID_TIME_SCALE_ERROR: String = 		"[Scenes] Invalid time scale %s. Setting time scale to 1.0"
-const SCENE_ADD_IN_PROGRESS_ERROR: String = 	"[Scenes] Attempted to queue a scene add operation while a scene change was in progress"
-const SCENE_RELOAD_IN_PROGRESS_ERROR: String = 	"[Scenes] Attempted to queue a scene reload operation while a scene change was in progress"
-const SCENE_REMOVE_IN_PROGRESS_ERROR: String = 	"[Scenes] Attempted to queue a scene remove operation while a scene change was in progress"
-const SCENE_SET_IN_PROGRESS_ERROR: String = 	"[Scenes] Attempted to queue a scene set operation while a scene change was in progress"
+const SCENE_ADD_QUEUED_INFO: String = 			"[Scenic] %s queued for creation"
+const SCENE_RELOAD_QUEUED_INFO: String = 		"[Scenic] %s queued for reloading"
+const SCENE_REMOVE_QUEUED_INFO: String = 		"[Scenic] %s queued for deletion"
+const SCENE_INSTANTIATED_INFO: String = 		"[Scenic] %s instantiated"
+const SCENE_RELOADED_INFO: String = 			"[Scenic] %s reloaded"
+const SCENE_FREED_INFO: String = 				"[Scenic] %s freed"
+const APPLY_SCENE_DELTAS_INFO: String = 		"[Scenic] Applying scene deltas"
+const SCENE_ADD_EXISTS_WARNING: String = 		"[Scenic] Attempted to add a scene when it was already added and not queued for removal"
+const SCENE_RELOAD_NOT_EXISTS_WARNING: String = "[Scenic] Attempted to reload a scene that was not added"
+const SCENE_REMOVE_NOT_EXISTS_WARNING: String = "[Scenic] Attempted to remove a scene that was not added"
+const SCENE_NOT_PRELOADED_WARNING: String = 	"[Scenic] %s had not started loading before _apply_scene_deltas was called"
+const INVALID_OWNER_ERROR: String = 			"[Scenic] Invalid scene owner %s. Must be \"Global\" or the name of a currently loaded scene (%d scenes currently loaded)"
+const INVALID_TIME_SCALE_ERROR: String = 		"[Scenic] Invalid time scale %s. Setting time scale to 1.0"
+const SCENE_ADD_IN_PROGRESS_ERROR: String = 	"[Scenic] Attempted to queue a scene add operation while a scene change was in progress"
+const SCENE_RELOAD_IN_PROGRESS_ERROR: String = 	"[Scenic] Attempted to queue a scene reload operation while a scene change was in progress"
+const SCENE_REMOVE_IN_PROGRESS_ERROR: String = 	"[Scenic] Attempted to queue a scene remove operation while a scene change was in progress"
+const SCENE_SET_IN_PROGRESS_ERROR: String = 	"[Scenic] Attempted to queue a scene set operation while a scene change was in progress"
 
 #region enums
 enum SceneChangeState {
