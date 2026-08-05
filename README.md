@@ -94,7 +94,7 @@ func _on_level_1_finished() -> void:
 
 	# Alternative code using queue_set_scene's exclude functionality.
 	# This code assumes that all scenes we want to keep have the "UI" tag applied in the inspector.
-	GlobalSceneManager.queue_set_scene(&"Level 2", [&"UI"])
+	GlobalSceneManager.queue_set_scene(&"Level 2", null, [&"UI"])
 	GlobalSceneManager.apply()
 ```
 
@@ -186,13 +186,16 @@ func _start(data: Variant) -> void:
 ```
 
 ## Force Loading
-
+> [!WARNING]
+> This section of the documentation is unfinished.
 
 ## Debugging
-
+> [!WARNING]
+> This section of the documentation is unfinished.
 
 ## Multiple Scene Managers
-
+> [!WARNING]
+> This section of the documentation is unfinished.
 
 
 
